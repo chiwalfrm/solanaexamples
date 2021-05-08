@@ -14,7 +14,8 @@ print('INFO: File', sys.argv[1], 'Loaded', file=sys.stderr)
 print('INFO: my_address =', my_address, file=sys.stderr)
 print('INFO: my_staking_address =', my_staking_address, file=sys.stderr)
 print('INFO: my_tokens =', my_tokens, file=sys.stderr)
-solana_client = Client("https://api.mainnet-beta.solana.com")
+#solana_client = Client("https://api.mainnet-beta.solana.com")
+solana_client = Client("https://solana-api.projectserum.com")
 if len(sys.argv) > 2 and sys.argv[2] == 'tokens':
         for coin, value in my_tokens.items():
                 amount = solana_client.get_token_account_balance(value, 'max')['result']['value'].get('uiAmount')
@@ -25,5 +26,11 @@ elif len(sys.argv) > 2 and sys.argv[2] == 'getalltokenaddresses':
                 print(item['pubkey'])
 else:
         print('SOL             ', '{:.18f}'.format(solana_client.get_balance(my_address, 'max')['result']['value']/1000000000).rjust(37).rstrip('0').rstrip('.'))
+        i1=1
         for value2 in my_staking_address:
-                print('sSOL            ', '{:.18f}'.format(solana_client.get_balance(value2, 'max')['result']['value']/1000000000).rjust(37).rstrip('0').rstrip('.'))
+                if i1 > 1:
+                        solheader=str('sSOL' + str(i1))
+                else:
+                        solheader='sSOL'
+                print(solheader.ljust(16), '{:.18f}'.format(solana_client.get_balance(value2, 'max')['result']['value']/1000000000).rjust(37).rstrip('0').rstrip('.'))
+                i1 = i1 + 1
